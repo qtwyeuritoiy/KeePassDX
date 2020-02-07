@@ -57,7 +57,8 @@ class PasswordGenerator(private val resources: Resources) {
                          space: Boolean,
                          specials: Boolean,
                          brackets: Boolean,
-                         extended: Boolean): String {
+                         extended: Boolean,
+                         custom: String): String {
         // Desired password length is 0 or less
         if (length <= 0) {
             throw IllegalArgumentException(resources.getString(R.string.error_wrong_length))
@@ -72,7 +73,8 @@ class PasswordGenerator(private val resources: Resources) {
                 && !space
                 && !specials
                 && !brackets
-                && !extended) {
+                && !extended
+                && custom.isEmpty()) {
             throw IllegalArgumentException(resources.getString(R.string.error_pass_gen_type))
         }
 
@@ -85,7 +87,8 @@ class PasswordGenerator(private val resources: Resources) {
                 space,
                 specials,
                 brackets,
-                extended)
+                extended,
+                custom)
 
         val size = characterSet.length
 
@@ -108,7 +111,8 @@ class PasswordGenerator(private val resources: Resources) {
                                 space: Boolean,
                                 specials: Boolean,
                                 brackets: Boolean,
-                                extended: Boolean): String {
+                                extended: Boolean,
+                                custom: String): String {
         val charSet = StringBuilder()
 
         if (upperCase) {
@@ -145,6 +149,14 @@ class PasswordGenerator(private val resources: Resources) {
 
         if (extended) {
             charSet.append(extendedChars())
+        }
+
+        // Eliminate duplicates, both with existing selections and within custom string
+        if (custom.isNotEmpty()){
+            for (char in custom){
+                if (!charSet.contains(char))
+                    charSet.append(char)
+            }
         }
 
         return charSet.toString()

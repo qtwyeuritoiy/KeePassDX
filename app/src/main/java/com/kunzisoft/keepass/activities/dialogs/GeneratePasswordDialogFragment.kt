@@ -53,6 +53,7 @@ class GeneratePasswordDialogFragment : DialogFragment() {
     private var specialsBox: CompoundButton? = null
     private var bracketsBox: CompoundButton? = null
     private var extendedBox: CompoundButton? = null
+    private var customEdit: EditText? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -85,6 +86,7 @@ class GeneratePasswordDialogFragment : DialogFragment() {
             specialsBox = root?.findViewById(R.id.cb_specials)
             bracketsBox = root?.findViewById(R.id.cb_brackets)
             extendedBox = root?.findViewById(R.id.cb_extended)
+            customEdit = root?.findViewById(R.id.edit_custom)
 
             assignDefaultCharacters()
 
@@ -157,6 +159,8 @@ class GeneratePasswordDialogFragment : DialogFragment() {
                 }
             }
         }
+
+        customEdit?.setText("")
     }
 
     private fun fillPassword() {
@@ -177,7 +181,8 @@ class GeneratePasswordDialogFragment : DialogFragment() {
                     spaceBox?.isChecked == true,
                     specialsBox?.isChecked == true,
                     bracketsBox?.isChecked == true,
-                    extendedBox?.isChecked == true)
+                    extendedBox?.isChecked == true,
+                    customEdit?.text.toString())
         } catch (e: NumberFormatException) {
             passwordInputLayoutView?.error = getString(R.string.error_wrong_length)
         } catch (e: IllegalArgumentException) {
